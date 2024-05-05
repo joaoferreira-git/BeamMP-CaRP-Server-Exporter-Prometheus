@@ -4,4 +4,6 @@ services:
   prometheus-exporter:
     build: .
     ports:
-      - "9584:9584"
+      - "${PORT:-9584}:9584"  # Use the port defined in the PORT environment variable or default to 9584
+    environment:
+      - PORT=${PORT:-9584}  # Set the PORT environment variable

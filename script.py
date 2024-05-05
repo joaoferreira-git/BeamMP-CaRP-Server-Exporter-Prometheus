@@ -3,6 +3,10 @@ import requests
 import json
 import time
 from collections import defaultdict
+import os
+
+# Get port from environment variable or use default value 9584
+PORT = int(os.getenv('PORT', '9584'))
 
 def fetch_server_data():
     url = "https://backend.beammp.com/servers"
@@ -87,7 +91,7 @@ if __name__ == '__main__':
     server_map_players_metric = Gauge('beammp_server_map_players', 'Total number of players per server map', ['map'])
     
     # Start HTTP server to expose Prometheus metrics
-    start_http_server(9584)  # Changed port to 9584
+    start_http_server(PORT)  # Use the port defined in the environment variable or default to 9584
     
     # Update metrics every 60 seconds
     while True:
