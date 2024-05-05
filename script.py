@@ -3,10 +3,6 @@ import requests
 import json
 import time
 from collections import defaultdict
-import os
-
-# Get port from environment variable or use default value 9584
-PORT = int(os.getenv('PORT', '9584'))
 
 def fetch_server_data():
     url = "https://backend.beammp.com/servers"
@@ -36,12 +32,6 @@ def update_metrics():
         max_players = int(server.get('maxplayers', 0))  # Set max players to 0 if not present
         total_max_players += max_players  # Add max players to total max players counter
         
-        players_list = server.get('playerslist', "").split(',')
-        ip = server.get('ip')
-        port = server.get('port')
-        version = server.get('version')
-        cversion = server.get('cversion')
-        
         map_name = server.get('map')
         server_map_players[map_name] += players
         
@@ -49,14 +39,6 @@ def update_metrics():
             server_name_metric.labels(sname)
             server_players_metric.labels(sname).set(players)  # Track number of players connected
             server_max_players_metric.labels(sname).set(max_players)  # Track max players
-            server_ip_metric.labels(sname).info({"ip": ip})  # Update as Info metric
-            server_port_metric.labels(sname).set(port)  # Set port directly
-            server_version_metric.labels(sname).info({"version": version})  # Update as Info metric
-            server_cversion_metric.labels(sname).set(cversion)  # Set cversion directly
-            
-            # Track individual players
-            for player in players_list:
-                player_metric.labels(sname, player).set(1)
     
     # Set the total players metric
     total_players_metric.set(total_players)
@@ -73,13 +55,6 @@ if __name__ == '__main__':
     server_name_metric = Info('beammp_server_name', 'Name of BeamMP servers', ['sname'])
     server_players_metric = Gauge('beammp_server_players', 'Number of players on BeamMP servers', ['sname'])
     server_max_players_metric = Gauge('beammp_server_max_players', 'Max players on BeamMP servers', ['sname'])
-    server_ip_metric = Info('beammp_server_ip', 'IP address of BeamMP servers', ['sname'])
-    server_port_metric = Gauge('beammp_server_port', 'Port of BeamMP servers', ['sname'])
-    server_version_metric = Info('beammp_server_version', 'Version of BeamMP servers', ['sname'])
-    server_cversion_metric = Gauge('beammp_server_cversion', 'Cversion of BeamMP servers', ['sname'])
-    
-    # Player metric to track individual players
-    player_metric = Gauge('beammp_player_list', 'Player List in Each Server', ['sname', 'player'])
     
     # Total players metric
     total_players_metric = Gauge('beammp_total_players', 'Total number of players across all servers')
@@ -91,7 +66,7 @@ if __name__ == '__main__':
     server_map_players_metric = Gauge('beammp_server_map_players', 'Total number of players per server map', ['map'])
     
     # Start HTTP server to expose Prometheus metrics
-    start_http_server(PORT)  # Use the port defined in the environment variable or default to 9584
+    start_http_server(9584)  # Changed port to 9584
     
     # Update metrics every 60 seconds
     while True:
