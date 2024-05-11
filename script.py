@@ -4,9 +4,19 @@ import json
 import time
 from collections import defaultdict
 import os
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
 
 # Get port from environment variable or use default value 9584
 PORT = int(os.getenv('PORT', '9584'))
+
+# Get server name filter from environment variable or use default value
+SERVER_NAME_FILTER = os.getenv('SERVER_NAME_FILTER')
+
+# Log the value of SERVER_NAME_FILTER
+logging.info(f"SERVER_NAME_FILTER: {SERVER_NAME_FILTER}")
 
 def fetch_server_data():
     url = "https://backend.beammp.com/servers"
@@ -15,9 +25,9 @@ def fetch_server_data():
         response.raise_for_status()  # Raise exception for 4xx or 5xx status codes
         return response.json()
     except requests.exceptions.HTTPError as http_err:
-        print(f"HTTP error occurred: {http_err}")
+        logging.error(f"HTTP error occurred: {http_err}")
     except Exception as err:
-        print(f"Other error occurred: {err}")
+        logging.error(f"Other error occurred: {err}")
     return []
 
 def update_metrics():
@@ -27,7 +37,7 @@ def update_metrics():
     server_map_players = defaultdict(int)  # Initialize dictionary to track players per server map
     for server in server_data:
         sname = server.get('sname')
-        if "[^b🐟 CaRP^r Test Server]" not in sname:
+        if SERVER_NAME_FILTER not in sname:
             continue
         
         players = int(server.get('players', 0))  # Set players to 0 if not present
