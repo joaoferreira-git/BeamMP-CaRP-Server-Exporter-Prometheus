@@ -1,13 +1,13 @@
+import logging
+import os
+import time
+from collections import defaultdict
 from prometheus_client import start_http_server, Gauge, Info
 import requests
 import json
-import time
-from collections import defaultdict
-import os
-import logging
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO, filename='/var/log/beammp/beammp_players.log', format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Get port from environment variable or use default value 9584
 PORT = int(os.getenv('PORT', '9584'))
@@ -54,6 +54,12 @@ def update_metrics():
             server_players_metric.labels(sname).set(players)  # Track number of players connected
             server_max_players_metric.labels(sname).set(max_players)  # Track max players
     
+        players_list = server.get('playerslist', [])
+        
+        # Log server data in the desired format
+        logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S')}, {sname}, {players_list}")
+
+
     # Set the total players metric
     total_players_metric.set(total_players)
     
@@ -82,7 +88,8 @@ if __name__ == '__main__':
     # Start HTTP server to expose Prometheus metrics
     start_http_server(PORT)  # Use the port defined in the environment variable or default to 9584
     
-    # Update metrics every 60 seconds
+    # Update metrics and log player information every 60 seconds
     while True:
         update_metrics()
+        logging.info("Player information updated.")
         time.sleep(60)  # Updated interval to 60 seconds
