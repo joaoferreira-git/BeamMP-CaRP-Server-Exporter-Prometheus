@@ -10,4 +10,4 @@ scrape_configs:
           - localhost
         labels:
           job: beammp_exporter
-          __path__: /var/log/beammp/*.log
+          __path__: /app/log/*.log
