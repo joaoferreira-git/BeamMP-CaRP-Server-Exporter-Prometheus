@@ -1,5 +1,5 @@
 clients:
-  - url: http://192.168.1.77:3100/loki/api/v1/push
+  - url: http://192.168.1.236:3100/loki/api/v1/push
     external_labels:
       job: beammp_exporter
 

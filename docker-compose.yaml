@@ -22,5 +22,11 @@ services:
     ports:
       - "9080:80"  # Expose Promtail's logs on port 9080
 
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+
 volumes:
   beammp_logs:  # Define a volume for sharing log files
