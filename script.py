@@ -7,7 +7,7 @@ import requests
 import json
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, filename='/app/log/beammp_players.log', format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, filename='/var/log/beammp/beammp_players.log', format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Get port from environment variable or use default value 9584
 PORT = int(os.getenv('PORT', '9584'))

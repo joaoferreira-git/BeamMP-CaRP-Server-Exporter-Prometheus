@@ -10,11 +10,17 @@ services:
       - SERVER_NAME_FILTER=${SERVER_NAME_FILTER:-[^b🐟 CaRP^r Test Server]}
     depends_on:
       - promtail
+    volumes:
+      - beammp_logs:/var/log/beammp
+
   promtail:
     image: grafana/promtail:latest
     volumes:
-      - /app/log:/app/log/
+      - beammp_logs:/var/log/beammp
       - ./promtail-config.yaml:/etc/promtail/promtail-config.yaml
     command: -config.file=/etc/promtail/promtail-config.yaml
     ports:
       - "9080:80"  # Expose Promtail's logs on port 9080
+
+volumes:
+  beammp_logs:  # Define a volume for sharing log files
