@@ -1,5 +1,5 @@
 # BeamMP CaRP Server Exporter Prometheus 
-Python script that parses information from the Beammp backend with built in prometheus exporter with a variable to filter server by name and use a custom port for the server prometheus metrics. 
+Python script that parses information from the Beammp backend with built in prometheus exporter with a variable to filter server by name and use a custom port for the server prometheus metrics.  
 DockerHub: https://hub.docker.com/r/toinotech/beammp-carp-server-exporter-prometheus
 
 I made this exporter so that I could track the CaRP Server Stats in grafana.
