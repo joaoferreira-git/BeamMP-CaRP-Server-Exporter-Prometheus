@@ -8,6 +8,7 @@ services:
     environment:
       - PORT=${PORT:-9584}
       - SERVER_NAME_FILTER=${SERVER_NAME_FILTER:-[^b🐟 CaRP^r Test Server]}
+      - LOGGING=${LOGGING:-true}
     depends_on:
       - promtail
     volumes:

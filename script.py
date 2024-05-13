@@ -6,8 +6,15 @@ from prometheus_client import start_http_server, Gauge, Info
 import requests
 import json
 
-# Configure logging
-logging.basicConfig(level=logging.INFO, filename='/var/log/beammp/beammp_players.log', format='%(asctime)s - %(levelname)s - %(message)s')
+# Configuration variables
+LOGGING = os.getenv('LOGGING', 'true').lower() == 'true'
+
+# Configure logging if enabled
+if LOGGING:
+    logging.basicConfig(level=logging.INFO, filename='/var/log/beammp/beammp_players.log', format='%(asctime)s - %(levelname)s - %(message)s')
+    logging.info("Logging enabled.")
+else:
+    logging.disable(logging.CRITICAL)  # Disable logging if not enabled
 
 # Get port from environment variable or use default value 9584
 PORT = int(os.getenv('PORT', '9584'))
@@ -40,10 +47,10 @@ def update_metrics():
         if SERVER_NAME_FILTER not in sname:
             continue
         
-        players = int(server.get('players', 0))  # Set players to 0 if not present
+        players = int(server.get('players'))
         total_players += players  # Add players to total players counter
         
-        max_players = int(server.get('maxplayers', 0))  # Set max players to 0 if not present
+        max_players = int(server.get('maxplayers'))
         total_max_players += max_players  # Add max players to total max players counter
         
         map_name = server.get('map')
@@ -56,8 +63,10 @@ def update_metrics():
     
         players_list = server.get('playerslist', [])
         
-        # Log server data in the desired format
-        logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S')}, {sname}, {players_list}")
+        # Log server data in the desired format if logging is enabled
+        if LOGGING:
+            logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S')}, {sname}, {players_list}, Players: {players}, Max Players: {max_players}")
+
 
 
     # Set the total players metric
