@@ -65,7 +65,7 @@ def update_metrics():
         
         # Log server data in the desired format if logging is enabled
         if LOGGING:
-            logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S')}, {sname}, {players_list}, Players: {players}, Max Players: {max_players}")
+            logging.info(f"{sname} - {players_list} - Players: {players} - Max Players: {max_players}")
 
 
 
