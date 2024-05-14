@@ -9,19 +9,21 @@ services:
       - PORT=${PORT:-9584}
       - SERVER_NAME_FILTER=${SERVER_NAME_FILTER:-[^b🐟 CaRP^r Test Server]}
       - LOGGING=${LOGGING:-true}
-    depends_on:
-      - promtail
     volumes:
       - beammp_logs:/var/log/beammp
+      - promtail_config:/app/promtail
 
   promtail:
     image: grafana/promtail:latest
+    depends_on:
+      - prometheus-exporter
     volumes:
       - beammp_logs:/var/log/beammp
-      - ./promtail-config.yaml:/etc/promtail/promtail-config.yaml
-    command: -config.file=/etc/promtail/promtail-config.yaml
+      - promtail_config:/app/promtail
+    command: -config.expand-env=true -config.file=/app/promtail/config/config.yml
     ports:
       - "9080:80"  # Expose Promtail's logs on port 9080
 
 volumes:
   beammp_logs:  # Define a volume for sharing log files
+  promtail_config: # Define a volume to share the config file
