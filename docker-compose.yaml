@@ -19,7 +19,7 @@ services:
       - prometheus-exporter
     volumes:
       - beammp_logs:/var/log/beammp
-      - promtail_config:/app/promtail
+      - promtail_config:/app/promtail:ro
     command: -config.expand-env=true -config.file=/app/promtail/config/config.yml
     ports:
       - "9080:80"  # Expose Promtail's logs on port 9080
