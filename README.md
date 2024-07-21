@@ -1,5 +1,5 @@
 # BeamMP CaRP Server Exporter Prometheus 
-Python script that parses information from the Beammp backend with built in prometheus exporter with a variable to filter server by name and use a custom port for the server prometheus metrics.  
+Python script that parses information from the Beammp backend with built in prometheus exporter with a variable to filter server by name, with a custom port for the prometheus metrics endpoint and integrated loki logs exporter.
 
 I made this to track player count in the CaRP Servers and in case someone else wants to do something similar its free to use.
 Special thanks to chatgpt for making this possible.
