@@ -14,7 +14,7 @@ services:
       - promtail_config:/app/promtail
 
   promtail:
-    image: grafana/promtail:latest
+    image: grafana/promtail:main-73cbbb0
     depends_on:
       - prometheus-exporter
     volumes:
